@@ -8,7 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.fiap.autria.ui.screens.HomeScreen
+import com.fiap.autria.ui.screens.home.HomeScreen
 import com.fiap.autria.ui.theme.AutriaTheme
 
 class MainActivity : ComponentActivity() {

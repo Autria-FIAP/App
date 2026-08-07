@@ -1,10 +1,9 @@
-package com.fiap.autria.ui.screens
+package com.fiap.autria.ui.screens.home
 
 import com.fiap.autria.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,38 +13,51 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import com.fiap.autria.ui.theme.Blue80
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fiap.autria.ui.theme.Blue80
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
+
     Scaffold(
-        bottomBar = {
-        },
         topBar = {
             TopAppBar(
                 title = {},
+                actions = {
+                    IconButton(
+                        onClick = {
+
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_settings_24),
+                            contentDescription = "Configurações",
+                            tint = Color.Black
+                        )
+                    }
+                },
                 colors =  TopAppBarDefaults.topAppBarColors(
                     containerColor = Color(0xFFFDF0D5),
             )
@@ -58,26 +70,30 @@ fun HomeScreen() {
             modifier = Modifier.fillMaxSize().padding(paddingValues).background(Color(0xFFfdf0d5)),
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(start = 16.dp)
             ) {
                 Box(
                     modifier = Modifier
                         .size(10.dp)
                         .background(Color(0xFFcc8400), CircleShape)
+
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
                     text = "Que bom te ver, usuário!",
-                    fontSize = 20.sp
+                    fontSize = 25.sp,
+                    fontFamily = FontFamily(Font(R.font.sfpro))
                 )
             }
 
             Text(
                 text = "Pronto para te acompanhar",
                 fontSize = 50.sp,
-                color = Color(0xFF1B53BD),
+                color = Blue80,
+                modifier = Modifier.padding(start = 16.dp),
                 fontFamily = FontFamily(Font(R.font.sfpro))
             )
             Image(
@@ -91,15 +107,7 @@ fun HomeScreen() {
                     .padding(horizontal = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Box(
-                    modifier = Modifier.fillMaxWidth()
-                        .size(60.dp)
-                        .border(
-                            width = 1.dp,
-                            color = Color.Black,
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                )
+
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Box(
@@ -107,14 +115,38 @@ fun HomeScreen() {
                         .size(60.dp)
                         .border(
                             width = 2.dp,
-                            color = Color(0xFF1B53BD),
+                            color = Blue80,
                             shape = RoundedCornerShape(12.dp)
                         )
                         .background(
-                            color = Color(0xFF1B53BD),
+                            color = Blue80,
                             shape = RoundedCornerShape(12.dp)
-                        )
-                )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Assistente de IA",
+                        color = Color.White,
+                        fontSize = 21.sp,
+                        fontFamily = FontFamily(Font(R.font.sfpro))
+                    )
+                }
+                Spacer(modifier = Modifier.height(36.dp))
+                FloatingActionButton(
+                    onClick = {
+
+                    },
+                    containerColor = Color(0xFFEC5821),
+                    shape = CircleShape,
+                    modifier = Modifier.size(90.dp)
+
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.autrialogo),
+                        contentDescription = "Conectar ao Bluetooth",
+                        tint = Color.White
+                    )
+                }
             }
 
         }
