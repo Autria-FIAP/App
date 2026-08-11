@@ -36,6 +36,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fiap.autria.ui.theme.Blue80
+import com.fiap.autria.ui.theme.Orange80
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -136,7 +137,7 @@ fun HomeScreen() {
                     onClick = {
 
                     },
-                    containerColor = Color(0xFFEC5821),
+                    containerColor = Orange80,
                     shape = CircleShape,
                     modifier = Modifier.size(90.dp)
 
