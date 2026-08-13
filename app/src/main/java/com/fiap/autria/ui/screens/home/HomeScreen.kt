@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import com.fiap.autria.ui.theme.Blue80
+import com.fiap.autria.ui.theme.Blue40
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,8 +35,9 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.fiap.autria.ui.theme.Blue80
-import com.fiap.autria.ui.theme.Orange80
+import com.fiap.autria.ui.theme.Blue40
+import com.fiap.autria.ui.theme.Blue40
+import com.fiap.autria.ui.theme.Orange40
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,7 +94,7 @@ fun HomeScreen() {
             Text(
                 text = "Pronto para te acompanhar",
                 fontSize = 50.sp,
-                color = Blue80,
+                color = Blue40,
                 modifier = Modifier.padding(start = 16.dp),
                 fontFamily = FontFamily(Font(R.font.sfpro))
             )
@@ -116,11 +117,11 @@ fun HomeScreen() {
                         .size(60.dp)
                         .border(
                             width = 2.dp,
-                            color = Blue80,
+                            color = Blue40,
                             shape = RoundedCornerShape(12.dp)
                         )
                         .background(
-                            color = Blue80,
+                            color = _root_ide_package_.com.fiap.autria.ui.theme.Blue40,
                             shape = RoundedCornerShape(12.dp)
                         ),
                     contentAlignment = Alignment.Center
@@ -137,7 +138,7 @@ fun HomeScreen() {
                     onClick = {
 
                     },
-                    containerColor = Orange80,
+                    containerColor = _root_ide_package_.com.fiap.autria.ui.theme.Orange40,
                     shape = CircleShape,
                     modifier = Modifier.size(90.dp)
 
