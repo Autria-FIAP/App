@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.fiap.autria.ui.screens.home.HomeScreen
 import com.fiap.autria.ui.theme.AutriaTheme
+import com.fiap.autria.navigation.AppNavigation
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 
 class MainActivity : ComponentActivity() {
@@ -18,7 +19,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            HomeScreen()
+            AppNavigation()
         }
     }
 }
