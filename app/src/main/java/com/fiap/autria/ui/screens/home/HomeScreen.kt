@@ -37,16 +37,23 @@
     import androidx.compose.ui.unit.dp
     import androidx.compose.ui.unit.sp
     import com.fiap.autria.ui.theme.BackgroundDark
-    import com.fiap.autria.ui.theme.Blue40
-    import com.fiap.autria.ui.theme.Blue40
     import com.fiap.autria.ui.theme.Border40
     import com.fiap.autria.ui.theme.Orange40
+    import com.fiap.autria.ui.components.BluetoothButton
+    import androidx.compose.runtime.getValue
+    import androidx.compose.runtime.mutableStateOf
+    import androidx.compose.runtime.remember
+    import androidx.compose.runtime.setValue
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun HomeScreen(
         onSettingsClick: () -> Unit
     ) {
+
+        var isConnecting by remember {
+            mutableStateOf(false)
+        }
 
         Scaffold(
             topBar = {
@@ -173,21 +180,12 @@
                     }
 
                     Spacer(modifier = Modifier.height(36.dp))
-                    FloatingActionButton(
+                    BluetoothButton(
+                        isConnecting = isConnecting,
                         onClick = {
-
-                        },
-                        containerColor = _root_ide_package_.com.fiap.autria.ui.theme.Orange40,
-                        shape = CircleShape,
-                        modifier = Modifier.size(90.dp)
-
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.autrialogo),
-                            contentDescription = "Conectar ao Bluetooth",
-                            tint = Color.White
-                        )
-                    }
+                            isConnecting = true
+                        }
+                    )
                 }
 
             }
