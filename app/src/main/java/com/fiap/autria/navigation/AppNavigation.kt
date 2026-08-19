@@ -6,6 +6,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fiap.autria.ui.screens.home.HomeScreen
 import com.fiap.autria.ui.screens.settings.SettingScreen
+import com.fiap.autria.ui.theme.AutriaTheme
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+
 
 object Routes {
     const val HOME = "home"
@@ -15,25 +21,31 @@ object Routes {
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
+    var isDarkTheme by remember { mutableStateOf(false) }
 
-    NavHost(
-        navController = navController,
-        startDestination = Routes.HOME
-    ) {
-        composable(Routes.HOME) {
-            HomeScreen(
-                onSettingsClick = {
-                    navController.navigate(Routes.SETTINGS)
-                }
-            )
-        }
+    AutriaTheme(darkTheme = isDarkTheme) {
+        NavHost(
+            navController = navController,
+            startDestination = Routes.HOME
+        ) {
+            composable(Routes.HOME) {
+                HomeScreen(
+                    onSettingsClick = {
+                        navController.navigate(Routes.SETTINGS)
+                    }
+                )
+            }
 
-        composable(Routes.SETTINGS) {
-            SettingScreen(
-                onBackClick = {
-                    navController.popBackStack()
-                }
-            )
+            composable(Routes.SETTINGS) {
+                SettingScreen(
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
+                    onToggleTheme = {
+                        isDarkTheme = !isDarkTheme
+                    }
+                )
+            }
         }
     }
 }
