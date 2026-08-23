@@ -4,6 +4,7 @@
     import androidx.compose.foundation.Image
     import androidx.compose.foundation.background
     import androidx.compose.foundation.border
+    import androidx.compose.foundation.clickable
     import androidx.compose.foundation.layout.Arrangement
     import androidx.compose.foundation.layout.Box
     import androidx.compose.foundation.layout.Column
@@ -29,6 +30,7 @@
     import androidx.compose.runtime.Composable
     import androidx.compose.ui.Alignment
     import androidx.compose.ui.Modifier
+    import androidx.compose.material3.MaterialTheme
     import androidx.compose.ui.graphics.Color
     import androidx.compose.ui.graphics.vector.ImageVector
     import androidx.compose.ui.res.painterResource
@@ -48,7 +50,8 @@
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun HomeScreen(
-        onSettingsClick: () -> Unit
+        onSettingsClick: () -> Unit,
+        onIaClick: () -> Unit
     ) {
 
         var isConnecting by remember {
@@ -68,12 +71,12 @@
                             Icon(
                                 painter = painterResource(id = R.drawable.baseline_settings_24),
                                 contentDescription = "Configurações",
-                                tint = Color.Black
+                                tint = MaterialTheme.colorScheme.onBackground
                             )
                         }
                     },
                     colors =  TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color(0xFFFDF0D5),
+                        containerColor = MaterialTheme.colorScheme.background,
                 )
                 )
             }
@@ -81,7 +84,10 @@
         ) { paddingValues ->
 
             Column(
-                modifier = Modifier.fillMaxSize().padding(paddingValues).background(Color(0xFFfdf0d5)),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .background(MaterialTheme.colorScheme.background),
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -99,6 +105,7 @@
                     Text(
                         text = "Que bom te ver, usuário!",
                         fontSize = 25.sp,
+                        color = MaterialTheme.colorScheme.onBackground,
                         fontFamily = FontFamily(Font(R.font.sfpro))
                     )
                 }
@@ -106,7 +113,8 @@
                 Text(
                     text = "Pronto para te acompanhar",
                     fontSize = 50.sp,
-                    color = Blue40,
+                    lineHeight = 55.sp,
+                    color = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier.padding(start = 16.dp),
                     fontFamily = FontFamily(Font(R.font.sfpro))
                 )
@@ -149,7 +157,7 @@
                             Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = "Desconectado",
-                            color = BackgroundDark,
+                            color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 21.sp,
                             fontFamily = FontFamily(Font(R.font.sfpro))
                         )
@@ -160,6 +168,9 @@
                     Box(
                         modifier = Modifier.fillMaxWidth()
                             .size(60.dp)
+                            .clickable {
+                                onIaClick()
+                            }
                             .border(
                                 width = 2.dp,
                                 color = Blue40,

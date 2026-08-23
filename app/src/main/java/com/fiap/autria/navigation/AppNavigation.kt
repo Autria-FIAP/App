@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fiap.autria.ui.screens.home.HomeScreen
+import com.fiap.autria.ui.screens.ia.IaScreen
 import com.fiap.autria.ui.screens.settings.SettingScreen
 import com.fiap.autria.ui.screens.about.AboutScreen
 import com.fiap.autria.ui.theme.AutriaTheme
@@ -17,6 +18,7 @@ object Routes {
     const val HOME = "home"
     const val SETTINGS = "settings"
     const val ABOUT = "about"
+    const val IA = "ia"
 }
 
 @Composable
@@ -33,6 +35,9 @@ fun AppNavigation() {
                 HomeScreen(
                     onSettingsClick = {
                         navController.navigate(Routes.SETTINGS)
+                    },
+                    onIaClick = {
+                        navController.navigate(Routes.IA)
                     }
                 )
             }
@@ -53,7 +58,16 @@ fun AppNavigation() {
                 AboutScreen(
                     onBackClick = {
                         navController.popBackStack()
-            })
+                    }
+                )
+            }
+            composable(Routes.IA) {
+                IaScreen(
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
+                )
+            }
         }
     }
-}}
+}
