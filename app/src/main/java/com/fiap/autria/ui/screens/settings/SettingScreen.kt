@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -32,7 +33,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SettingScreen(
     onBackClick: () -> Unit,
-    onToggleTheme: () -> Unit
+    onToggleTheme: () -> Unit,
+    onAboutClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -74,6 +76,25 @@ fun SettingScreen(
                     )
                     Text(
                         text = "Tema",
+                        modifier = Modifier.padding(start = 12.dp)
+                    )
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {onAboutClick()}
+                    .padding(16.dp),
+            ){
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        text = "Quem somos?",
                         modifier = Modifier.padding(start = 12.dp)
                     )
                 }
