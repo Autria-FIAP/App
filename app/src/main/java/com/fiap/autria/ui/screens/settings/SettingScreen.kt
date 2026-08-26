@@ -21,12 +21,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import android.content.Intent
+import android.provider.Settings
+import androidx.compose.material.icons.filled.RecordVoiceOver
+import androidx.compose.ui.platform.LocalContext
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,6 +39,9 @@ fun SettingScreen(
     onToggleTheme: () -> Unit,
     onAboutClick: () -> Unit
 ) {
+
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -90,7 +96,7 @@ fun SettingScreen(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Default.Person,
-                        contentDescription = null,
+                        contentDescription = "Quem Somos?",
                         tint = MaterialTheme.colorScheme.primary
                     )
                     Text(
@@ -98,6 +104,27 @@ fun SettingScreen(
                         modifier = Modifier.padding(start = 12.dp)
                     )
                 }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                        context.startActivity(intent)
+                    }
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.RecordVoiceOver,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = "Acessibilidade",
+                    modifier = Modifier.padding(start = 12.dp)
+                )
             }
         }
     }
