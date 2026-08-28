@@ -1,6 +1,17 @@
 package com.fiap.autria.ui.screens.ia
 
 import android.content.Context
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Bundle
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
+import android.speech.tts.TextToSpeech
+import java.util.Locale
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -24,10 +35,12 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.core.content.ContextCompat
 import com.fiap.autria.R
 import com.fiap.autria.data.models.NavigationResponse
 import com.fiap.autria.ui.theme.Orange40
 import com.fiap.autria.ui.viewmodels.NavigationViewModel
+import com.fiap.autria.ui.components.CameraPreview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,6 +59,127 @@ fun IaScreen(
     val connectionStatus by navigationViewModel.connectionStatus.collectAsStateWithLifecycle()
     val errorMessage by navigationViewModel.errorMessage.collectAsStateWithLifecycle()
     val isNavigating by navigationViewModel.isNavigating.collectAsStateWithLifecycle()
+    var isListening by remember { mutableStateOf(false) }
+    var recognizedText by remember { mutableStateOf("") }
+    var textToSpeech by remember { mutableStateOf<TextToSpeech?>(null) }
+
+    LaunchedEffect(Unit) {
+        textToSpeech = TextToSpeech(context) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                val result = textToSpeech?.setLanguage(Locale("pt", "BR"))
+
+                println("🔊 TTS INICIALIZADO: $status")
+                println("🔊 IDIOMA TTS: $result")
+            } else {
+                println("❌ ERRO AO INICIALIZAR TTS: $status")
+            }
+        }
+    }
+
+    val speechRecognizer = remember {
+        SpeechRecognizer.createSpeechRecognizer(context)
+    }
+
+    val speechIntent = remember {
+        Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            )
+
+            putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE,
+                "pt-BR"
+            )
+
+            putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE,
+                "pt-BR"
+            )
+
+            putExtra(
+                RecognizerIntent.EXTRA_PARTIAL_RESULTS,
+                true
+            )
+
+            putExtra(
+                RecognizerIntent.EXTRA_MAX_RESULTS,
+                3
+            )
+        }
+    }
+
+    val microphonePermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+            speechRecognizer.startListening(speechIntent)
+        }
+    }
+
+    DisposableEffect(speechRecognizer) {
+        speechRecognizer.setRecognitionListener(object : RecognitionListener {
+
+            override fun onReadyForSpeech(params: Bundle?) {
+                isListening = true
+            }
+
+            override fun onBeginningOfSpeech() {
+                println("🎤 COMEÇOU A OUVIR!")
+            }
+
+            override fun onRmsChanged(rmsdB: Float) {}
+
+            override fun onBufferReceived(buffer: ByteArray?) {}
+
+            override fun onEndOfSpeech() {
+                isListening = false
+                println("🎤 PAROU DE OUVIR!")
+            }
+
+            override fun onError(error: Int) {
+                isListening = false
+                println("🎤 ERRO DE VOZ: $error")
+            }
+
+            override fun onResults(results: Bundle?) {
+                println("🗣️ RECEBEU RESULTADO!")
+
+                val matches = results?.getStringArrayList(
+                    SpeechRecognizer.RESULTS_RECOGNITION
+                )
+
+                val spokenText = matches?.firstOrNull()
+
+                if (!spokenText.isNullOrBlank()) {
+                    recognizedText = spokenText
+
+                    textToSpeech?.speak(
+                        spokenText,
+                        TextToSpeech.QUEUE_FLUSH,
+                        null,
+                        "recognized_text"
+                    )
+                }
+
+                isListening = false
+            }
+
+            override fun onPartialResults(partialResults: Bundle?) {
+                val matches = partialResults?.getStringArrayList(
+                    SpeechRecognizer.RESULTS_RECOGNITION
+                )
+
+                println("🗣️ RESULTADO PARCIAL: ${matches?.firstOrNull()}")
+            }
+
+            override fun onEvent(eventType: Int, params: Bundle?) {}
+        })
+
+        onDispose {
+            speechRecognizer.destroy()
+        }
+    }
 
     LaunchedEffect(Unit) {
         navigationViewModel.clearError()
@@ -101,6 +235,19 @@ fun IaScreen(
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
+
+            // Preview da câmera
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                CameraPreview()
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             // Card de Status
             Card(
                 modifier = Modifier
@@ -161,6 +308,35 @@ fun IaScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
+
+            if (recognizedText.isNotEmpty()) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+                        Text(
+                            text = "🗣️ Você disse:",
+                            fontSize = 14.sp,
+                            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                        )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Text(
+                            text = recognizedText,
+                            fontSize = 18.sp
+                        )
+                    }
+                }
+            }
 
             // Card de Instruções
             if (navigationState != null) {
@@ -407,10 +583,25 @@ fun IaScreen(
                 ) {
                     IconButton(
                         onClick = {
-                            if (isNavigating) {
+                            if (isListening) {
+                                speechRecognizer.stopListening()
+                                isListening = false
                                 navigationViewModel.stopNavigation()
                             } else {
                                 navigationViewModel.startNavigation()
+
+                                val permission = ContextCompat.checkSelfPermission(
+                                    context,
+                                    Manifest.permission.RECORD_AUDIO
+                                )
+
+                                if (permission == PackageManager.PERMISSION_GRANTED) {
+                                    speechRecognizer.startListening(speechIntent)
+                                } else {
+                                    microphonePermissionLauncher.launch(
+                                        Manifest.permission.RECORD_AUDIO
+                                    )
+                                }
                             }
                         },
                         modifier = Modifier.fillMaxSize()
